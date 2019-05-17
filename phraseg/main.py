@@ -6,8 +6,12 @@ from tqdm import tqdm
 
 class Phraseg():
 
-    def __init__(self, source_file):
-        self.sentences = split_lines_by_punc(read_files_into_lines(source_file))
+    def __init__(self, source):
+        if is_file_exist(source):
+            content = read_files_into_lines(source)
+        else:
+            content = source
+        self.sentences = split_lines_by_punc(content)
         self.ngrams = self._cal_ngrams(self.sentences)
 
     def _cal_ngrams(self, sentences):
