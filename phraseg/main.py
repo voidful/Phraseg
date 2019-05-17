@@ -10,7 +10,7 @@ class Phraseg():
         if is_file_exist(source):
             content = read_files_into_lines(source)
         else:
-            content = source
+            content = source.splitlines()
         self.sentences = split_lines_by_punc(content)
         self.ngrams = self._cal_ngrams(self.sentences)
 
