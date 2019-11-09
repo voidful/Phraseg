@@ -40,6 +40,12 @@ Arguments
 Returns  
 - `result(dict)` : result dict - oov phrase with frequency
 
+
+### Colab Demo  
+``` 
+https://colab.research.google.com/drive/1n-JVX7XPupWz3RuoOOMv-1sQAhMo3sQo
+```
+
 ## Example 
 input file  
 ```text
