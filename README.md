@@ -1,6 +1,5 @@
 # Phraseg - 一言：新詞發現工具包
-Tools for out of vocabulary(oov) word extraction
-To discover new phrase    
+Tools for out of vocabulary(oov) word extraction and extracting new phrases       
 通過統計的方式實現無監督新詞發現    
 
 ### Feature
