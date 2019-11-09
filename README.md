@@ -1,5 +1,6 @@
 # Phraseg - 一言：新詞發現工具包
-Tools for oov extraction  
+Tools for out of vocabulary(oov) word extraction
+To discover new phrase    
 通過統計的方式實現無監督新詞發現    
 
 ### Feature
@@ -40,28 +41,39 @@ Arguments
 Returns  
 - `result(dict)` : result dict - oov phrase with frequency
 
-
-## Example
-input file
-```text
-卷一‧周鄭交質　　左傳‧隱公三年
-
-鄭武公、莊公為平王卿士，王貳于虢，鄭伯怨王。王曰：「無之。」故周鄭交質。王子
-狐為質於鄭，鄭公子忽為質於周。
-
-王崩，周人將畀虢公政。四月，鄭祭足帥師取溫之麥；秋，又取成周之禾。周鄭交惡。
-
-君子曰：「信不由中，質無益也。明恕而行，要之以禮，雖無有質，誰能間之？苟有明
-信，澗溪沼沚之毛，蘋蘩薀藻之菜，筐筥錡釜之器，潢汙行潦之水，可薦於鬼神，可羞
-於王公。而況君子結二國之信，行之以禮，又焉用質？風有采蘩、采蘋，雅有行葦、泂
-酌，昭忠信也。」
-```
-Result  
-```text
-('周鄭交', 3), ('為質於', 2), ('君子', 2)]
-```
-
 ## Example 
+input file  
+```text
+Apple in October 2019 debuted the AirPods Pro, a new higher-end version of its existing AirPods with an updated design, noise cancellation technology, better sound, and a more expensive $249 price tag.
+
+Apple says that with the AirPods Pro, the company is taking the magic of the AirPods "even further," with the AirPods Pro to be sold alongside the lower cost AirPods 2.
+
+The AirPods Pro look similar to the original AirPods, but feature a wider front to accommodate silicone tips for comfort, fit, and noise cancellation purposes. Tips come in three sizes to fit different ears.
+
+Though we heard rumors suggesting AirPods Pro might come in multiple colors, Apple is offering them only in white, much like the original AirPods.
+
+Active Noise Cancellation is a key feature of the AirPods 2, using two microphones (one outward facing and one inward facing) along with advanced software to adapt to each ear for what Apple says is a "uniquely customized, superior noise-canceling experience."
+
+With a built-in Transparency mode that can be toggled on, users have the option to listen to music with Active Noise Cancellation turned on while still hearing the ambient environment around them.
+
+Inside of the AirPods Pro, there's a new vent system aimed at equalizing pressure, which Apple says will minimize the discomfort common with other in-ear designs for a better fit and a more comfortable wearing experience.
+```
+Result    
+```text
+[('the AirPods', 6),
+ ('AirPods Pro', 6),
+ ('the AirPods Pro', 4),
+ ('Apple says', 3),
+ ('of the AirPods', 3),
+ ('a new', 2),
+ ('noise cancellation', 2),
+ ('and a more', 2),
+ ('with the AirPods Pro', 2),
+ ('come in', 2),
+ ('Active Noise Cancellation', 2),
+ ('is a', 2)]
+```
+
 input file  
 ```text
 古文觀止
