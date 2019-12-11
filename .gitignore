@@ -119,10 +119,6 @@ venv.bak/
 # mypy
 .mypy_cache/
 
-# test file
-test
-
-
 .how2
 how2
 /how2
