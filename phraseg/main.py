@@ -220,25 +220,26 @@ class Phraseg():
 
     def extract_sent(self, sent, filter=False):
         result_dict = defaultdict(int)
-        result = defaultdict(int)
-        result_arr = []
-        ngram_part = split_sentence_to_ngram_in_part(sent)
-        if len(ngram_part) > 0:
-            for part in ngram_part:
-                filter_result = self._filter_condprob(part, self.ngrams)
-                for key, value in filter_result.items():
-                    result[key] = self.ngrams[key]
-                    result_arr.append(key)
-        if len(result) > 0:
-            result_arr = self.maximum_match_same_value(result)
-            if filter:
-                rm_sup = self._remove_by_superlap(result_arr, result, sent)
-                result_arr = self._remove_by_overlap(rm_sup, sent, self.ngrams)
-                gaol = self._all_words_match_maximum_array(result_arr)
-                for i in gaol:
-                    result_dict[i] += 1
-            else:
-                for key in result_arr:
-                    result_dict[key] += 1
+        for sentence in tqdm(split_lines_by_punc(sent)):
+            result = defaultdict(int)
+            result_arr = []
+            ngram_part = split_sentence_to_ngram_in_part(sentence)
+            if len(ngram_part) > 0:
+                for part in ngram_part:
+                    filter_result = self._filter_condprob(part, self.ngrams)
+                    for key, value in filter_result.items():
+                        result[key] = self.ngrams[key]
+                        result_arr.append(key)
+            if len(result) > 0:
+                result_arr = self.maximum_match_same_value(result)
+                if filter:
+                    rm_sup = self._remove_by_superlap(result_arr, result, sentence)
+                    result_arr = self._remove_by_overlap(rm_sup, sentence, self.ngrams)
+                    gaol = self._all_words_match_maximum_array(result_arr)
+                    for i in gaol:
+                        result_dict[i] += 1
+                else:
+                    for key in result_arr:
+                        result_dict[key] += 1
         result_dict = sorted(result_dict.items(), key=lambda kv: kv[1], reverse=True)
         return result_dict
