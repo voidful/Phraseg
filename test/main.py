@@ -19,20 +19,11 @@ class Test(unittest.TestCase):
 
     def testEng(self):
         phraseg = Phraseg('''
-Apple in October 2019 debuted the AirPods Pro, a new higher-end version of its existing AirPods with an updated design, noise cancellation technology, better sound, and a more expensive $249 price tag.
-
-Apple says that with the AirPods Pro, the company is taking the magic of the AirPods "even further," with the AirPods Pro to be sold alongside the lower cost AirPods 2.
-
-The AirPods Pro look similar to the original AirPods, but feature a wider front to accommodate silicone tips for comfort, fit, and noise cancellation purposes. Tips come in three sizes to fit different ears.
-
-Though we heard rumors suggesting AirPods Pro might come in multiple colors, Apple is offering them only in white, much like the original AirPods.
-
-Active Noise Cancellation is a key feature of the AirPods 2, using two microphones (one outward facing and one inward facing) along with advanced software to adapt to each ear for what Apple says is a "uniquely customized, superior noise-canceling experience."
-
-With a built-in Transparency mode that can be toggled on, users have the option to listen to music with Active Noise Cancellation turned on while still hearing the ambient environment around them.
-
-Inside of the AirPods Pro, there's a new vent system aimed at equalizing pressure, which Apple says will minimize the discomfort common with other in-ear designs for a better fit and a more comfortable wearing experience.
-           ''')
+        The goal of reducing sequential computation also forms the foundation of the Extended Neural GPU [16], ByteNet [18] and ConvS2S [9], all of which use convolutional neural networks as basic building block, computing hidden representations in parallel for all input and output positions. In these models, the number of operations required to relate signals from two arbitrary input or output positions grows in the distance between positions, linearly for ConvS2S and logarithmically for ByteNet. This makes it more difficult to learn dependencies between distant positions [12]. In the Transformer this is reduced to a constant number of operations, albeit at the cost of reduced effective resolution due to averaging attention-weighted positions, an effect we counteract with Multi-Head Attention as described in section 3.2.
+        Self-attention, sometimes called intra-attention is an attention mechanism relating different positions of a single sequence in order to compute a representation of the sequence. Self-attention has been used successfully in a variety of tasks including reading comprehension, abstractive summarization, textual entailment and learning task-independent sentence representations [4, 27, 28, 22].
+        End-to-end memory networks are based on a recurrent attention mechanism instead of sequence- aligned recurrence and have been shown to perform well on simple-language question answering and language modeling tasks [34].
+        To the best of our knowledge, however, the Transformer is the first transduction model relying entirely on self-attention to compute representations of its input and output without using sequence- aligned RNNs or convolution. In the following sections, we will describe the Transformer, motivate self-attention and discuss its advantages over models such as [17, 18] and [9].
+        ''')
         result = phraseg.extract()
         print(result)
         self.assertTrue(len(phraseg.ngrams) > 1)
