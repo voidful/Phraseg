@@ -220,7 +220,7 @@ class Phraseg():
 
     def extract_sent(self, sent, filter=False):
         result_dict = defaultdict(int)
-        for sentence in tqdm(split_lines_by_punc(sent)):
+        for sentence in tqdm(split_lines_by_punc([sent])):
             result = defaultdict(int)
             result_arr = []
             ngram_part = split_sentence_to_ngram_in_part(sentence)
