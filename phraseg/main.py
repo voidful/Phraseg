@@ -237,9 +237,9 @@ class Phraseg():
                     result_arr = self._remove_by_overlap(rm_sup, sentence, self.ngrams)
                     gaol = self._all_words_match_maximum_array(result_arr)
                     for i in gaol:
-                        result_dict[i] += 1
+                        result_dict[i] = self.ngrams[i]
                 else:
                     for key in result_arr:
-                        result_dict[key] += 1
+                        result_dict[key] = self.ngrams[key]
         result_dict = sorted(result_dict.items(), key=lambda kv: kv[1], reverse=True)
         return result_dict
