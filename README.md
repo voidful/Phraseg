@@ -13,7 +13,11 @@ Tools for out of vocabulary(oov) word extraction and extracting new phrases with
 - light and easy to use
 
 ### How it works?
-[https://voidful.github.io/voidful_blog/implement/2019/09/03/oov-detection-implement/](https://voidful.github.io/voidful_blog/implement/2019/09/03/oov-detection-implement/)
+English: 
+[https://medium.com/@voidful.stack/simple-and-effective-phrase-finding-in-multi-language-42264554acb](https://medium.com/@voidful.stack/simple-and-effective-phrase-finding-in-multi-language-42264554acb)  
+
+Chinese: 
+[https://voidful.github.io/voidful_blog/implement/2019/09/03/oov-detection-implement/](https://voidful.github.io/voidful_blog/implement/2019/09/03/oov-detection-implement/)  
 
 
 ## Usage
