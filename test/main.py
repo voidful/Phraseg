@@ -30,7 +30,7 @@ class Test(unittest.TestCase):
         self.assertTrue(len(result) > 1)
 
     def testEngLong(self):
-        import numpy as np
+
         phraseg = Phraseg('''
          Attention Is All You Need
          Ashish Vaswani∗ Google Brain
@@ -400,24 +400,14 @@ class Test(unittest.TestCase):
 
         ''')
         result = phraseg.extract_sent(filter=True,sent="The dominant sequence transduction models are based on complex recurrent or convolutional neural networks that include an encoder and a decoder. The best performing models also connect the encoder and decoder through an attention mechanism. We propose a new simple network architecture, the Transformer, based solely on attention mechanisms, dispensing with recurrence and convolutions entirely. Experiments on two machine translation tasks show these models to be superior in quality while being more parallelizable and requiring significantly less time to train. Our model achieves 28.4 BLEU on the WMT 2014 English- to-German translation task, improving over the existing best results, including ensembles, by over 2 BLEU. On the WMT 2014 English-to-French translation task, our model establishes a new single-model state-of-the-art BLEU score of 41.8 after training for 3.5 days on eight GPUs, a small fraction of the training costs of the best models from the literature. We show that the Transformer generalizes well to other tasks by applying it successfully to English constituency parsing both with large and limited training data.")
-        print(np.percentile([k[1] for k in result], (25, 50, 75), interpolation='midpoint'))
         print(result)
         self.assertTrue(len(phraseg.ngrams) > 1)
         self.assertTrue(len(result) > 1)
 
     def testChi(self):
         phraseg = Phraseg('''
-        卷一‧周鄭交質　　左傳‧隱公三年
-
-        鄭武公、莊公為平王卿士，王貳于虢，鄭伯怨王。王曰：「無之。」故周鄭交質。王子
-        狐為質於鄭，鄭公子忽為質於周。
-        
-        王崩，周人將畀虢公政。四月，鄭祭足帥師取溫之麥；秋，又取成周之禾。周鄭交惡。
-        
-        君子曰：「信不由中，質無益也。明恕而行，要之以禮，雖無有質，誰能間之？苟有明
-        信，澗溪沼沚之毛，蘋蘩薀藻之菜，筐筥錡釜之器，潢汙行潦之水，可薦於鬼神，可羞
-        於王公。而況君子結二國之信，行之以禮，又焉用質？風有采蘩、采蘋，雅有行葦、泂
-        酌，昭忠信也。」
+        Wiki（聆聽i/ˈwɪkiː/）是在全球資訊網上開放，且可供多人協同創作的超文字系統，由沃德·坎寧安於1995年首先開發。沃德·坎寧安將wiki定義為「一種允許一群用戶用簡單的描述來建立和連接一組網頁的社會計算系統」[1]。
+        有些人認為[2]，Wiki系統屬於一種人類知識的網路系統，讓人們可以在web的基礎上對Wiki文字進行瀏覽、建立和更改，而且這種建立、更改及發布的成本遠比HTML文字小。與此同時，Wiki系統還支援那些面向社群的協作式寫作，為協作式寫作提供了必要的幫助。最後Wiki的寫作者自然構成了一個社群，Wiki系統為這個社群提供了簡單的交流工具。與其它超文字系統相比，Wiki有使用簡便且開放的特點，有助於在一個社群內共享某個領域的知識。
         ''')
         result = phraseg.extract()
         print(result)

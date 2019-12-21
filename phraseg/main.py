@@ -48,17 +48,19 @@ class Phraseg():
         internal_feature[sentence_array[len(sentence_array) - 1]] = p
 
         result = {key: value for key, value in internal_feature.items() if 0 < value < 1 < len(key)}
-
-        # res_key = []
-        # for key, value in result.items():
-        #     res_key.append(key)
-        #
-        # if len(res_key) > 0:
-        #     res_key = filter_percentile(res_key, ngrams)
-        #     result = {key: value for key, value in result.items() if
-        #               key in res_key}
-
         return result
+
+    def _filter_second_frequently(self, result_dict):
+        words = list(result_dict.keys())
+        ngrams = self._cal_ngrams(words)
+        for word in words:
+            keep = False
+            for i in spilt_sentence_to_array(word, True):
+                if ngrams[i] < self.ngrams[word]:
+                    keep = True
+            if not keep:
+                result_dict.pop(word)
+        return result_dict
 
     def _reverse_non_unique_mapping(self, d):
         dinv = defaultdict(list)
@@ -194,27 +196,30 @@ class Phraseg():
 
     def extract(self, filter=False):
         result_dict = defaultdict(int)
+        result_arr = []
         for sentence in tqdm(self.sentences):
-            result = defaultdict(int)
-            result_arr = []
+            filter_dict = defaultdict(int)
+            filter_arr = []
             ngram_part = split_sentence_to_ngram_in_part(sentence)
             if len(ngram_part) > 0:
                 for part in ngram_part:
                     filter_result = self._filter_condprob(part, self.ngrams)
                     for key, value in filter_result.items():
-                        result[key] = self.ngrams[key]
-                        result_arr.append(key)
-            if len(result) > 0:
-                result_arr = self.maximum_match_same_value(result)
+                        filter_dict[key] = self.ngrams[key]
+                        filter_arr.append(key)
+            if len(filter_dict) > 0:
                 if filter:
-                    rm_sup = self._remove_by_superlap(result_arr, result, sentence)
-                    result_arr = self._remove_by_overlap(rm_sup, sentence, self.ngrams)
-                    gaol = self._all_words_match_maximum_array(result_arr)
+                    filter_arr = self.maximum_match_same_value(filter_dict)
+                    rm_sup = self._remove_by_superlap(filter_arr, filter_dict, sentence)
+                    filter_arr = self._remove_by_overlap(rm_sup, sentence, self.ngrams)
+                    gaol = self._all_words_match_maximum_array(filter_arr)
                     for i in gaol:
                         result_dict[i] += 1
                 else:
-                    for key in result_arr:
+                    for key in filter_arr:
                         result_dict[key] += 1
+
+        result_dict = self._filter_second_frequently(result_dict)
         result_dict = sorted(result_dict.items(), key=lambda kv: kv[1], reverse=True)
         return result_dict
 
@@ -231,8 +236,8 @@ class Phraseg():
                         result[key] = self.ngrams[key]
                         result_arr.append(key)
             if len(result) > 0:
-                result_arr = self.maximum_match_same_value(result)
                 if filter:
+                    result_arr = self.maximum_match_same_value(result)
                     rm_sup = self._remove_by_superlap(result_arr, result, sentence)
                     result_arr = self._remove_by_overlap(rm_sup, sentence, self.ngrams)
                     gaol = self._all_words_match_maximum_array(result_arr)
@@ -241,5 +246,7 @@ class Phraseg():
                 else:
                     for key in result_arr:
                         result_dict[key] = self.ngrams[key]
+
+        result_dict = self._filter_second_frequently(result_dict)
         result_dict = sorted(result_dict.items(), key=lambda kv: kv[1], reverse=True)
         return result_dict
