@@ -217,7 +217,6 @@ class Phraseg():
                     for key, value in filter_result.items():
                         filter_dict[key] = self.ngrams[key]
                         filter_arr.append(key)
-            idf = self._cal_idf(filter_arr)
             if len(filter_dict) > 0:
                 if filter:
                     filter_arr = self.maximum_match_same_value(filter_dict)
@@ -225,12 +224,15 @@ class Phraseg():
                     filter_arr = self._remove_by_overlap(rm_sup, sentence, self.ngrams)
                     gaol = self._all_words_match_maximum_array(filter_arr)
                     for i in gaol:
-                        result_dict[i] = self.ngrams[i] / (idf[i] + 1)
+                        result_dict[i] = self.ngrams[i]
                 else:
                     for key in filter_arr:
-                        result_dict[key] = self.ngrams[key] / (idf[key] + 1)
+                        result_dict[key] = self.ngrams[key]
 
         result_dict = self._filter_second_frequently(result_dict)
+        idf = self._cal_idf(list(result_dict.keys()))
+        for k, v in result_dict.items():
+            result_dict[k] = v / (idf[k] + 1)
         result_dict = sorted(result_dict.items(), key=lambda kv: kv[1], reverse=True)
         return result_dict
 
@@ -260,5 +262,8 @@ class Phraseg():
                         result_dict[key] = self.ngrams[key] / (idf[key] + 1)
 
         result_dict = self._filter_second_frequently(result_dict)
+        idf = self._cal_idf(list(result_dict.keys()))
+        for k, v in result_dict.items():
+            result_dict[k] = v / (idf[k] + 1)
         result_dict = sorted(result_dict.items(), key=lambda kv: kv[1], reverse=True)
         return result_dict
