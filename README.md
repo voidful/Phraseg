@@ -7,7 +7,7 @@ Tools for out of vocabulary(oov) word extraction and extracting new phrases with
 - 召回率更好
 - 支持不同語言
 - 輕量易用
-- extract phrase from extreme small context
+- extract phrases on very little content
 - better recall compare to old method
 - support different language
 - light and easy to use

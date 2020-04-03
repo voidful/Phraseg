@@ -13,6 +13,20 @@ class Phraseg():
             content = source.splitlines()
         self.sentences = split_lines_by_punc(content)
         self.ngrams = self._cal_ngrams(self.sentences)
+        self.idf = self._cal_idf(self.sentences)
+
+    def _chunks(self, l, n):
+        n = max(1, n)
+        return (l[i:i + n] for i in range(0, len(l), n))
+
+    def _cal_idf(self, sentences):
+        idf = defaultdict(int)
+        chunks = [" ".join(i) for i in self._chunks(sentences, 20)]
+        for k in self.ngrams.keys():
+            for chunk in chunks:
+                if k in chunk:
+                    idf[k] += 1
+        return idf
 
     def _cal_ngrams(self, sentences):
         ngrams = defaultdict(int)
@@ -214,10 +228,10 @@ class Phraseg():
                     filter_arr = self._remove_by_overlap(rm_sup, sentence, self.ngrams)
                     gaol = self._all_words_match_maximum_array(filter_arr)
                     for i in gaol:
-                        result_dict[i] += 1
+                        result_dict[i] = self.ngrams[i] / (self.idf[i] + 1)
                 else:
                     for key in filter_arr:
-                        result_dict[key] += 1
+                        result_dict[key] = self.ngrams[key] / (self.idf[key] + 1)
 
         result_dict = self._filter_second_frequently(result_dict)
         result_dict = sorted(result_dict.items(), key=lambda kv: kv[1], reverse=True)
@@ -225,7 +239,7 @@ class Phraseg():
 
     def extract_sent(self, sent, filter=False):
         result_dict = defaultdict(int)
-        for sentence in tqdm(split_lines_by_punc([sent])):
+        for sentence in split_lines_by_punc([sent]):
             result = defaultdict(int)
             result_arr = []
             ngram_part = split_sentence_to_ngram_in_part(sentence)
@@ -242,10 +256,10 @@ class Phraseg():
                     result_arr = self._remove_by_overlap(rm_sup, sentence, self.ngrams)
                     gaol = self._all_words_match_maximum_array(result_arr)
                     for i in gaol:
-                        result_dict[i] = self.ngrams[i]
+                        result_dict[i] = self.ngrams[i] / (self.idf[i] + 1)
                 else:
                     for key in result_arr:
-                        result_dict[key] = self.ngrams[key]
+                        result_dict[key] = self.ngrams[key] / (self.idf[key] + 1)
 
         result_dict = self._filter_second_frequently(result_dict)
         result_dict = sorted(result_dict.items(), key=lambda kv: kv[1], reverse=True)
