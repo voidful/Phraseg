@@ -12,32 +12,25 @@ class Phraseg():
         else:
             content = source.splitlines()
         self.sentences = split_lines_by_punc(content)
-        self.ngrams = self._cal_ngrams(self.sentences)
-        self.idf = self._cal_idf(self.sentences)
+        self.ngrams, self.idf = self._cal_ngrams_idf(self.sentences)
 
     def _chunks(self, l, n):
         n = max(1, n)
         return (l[i:i + n] for i in range(0, len(l), n))
 
-    def _cal_idf(self, sentences):
+    def _cal_ngrams_idf(self, sentences):
+        ngrams = defaultdict(int)
         idf = defaultdict(int)
         chunks = [" ".join(i) for i in self._chunks(sentences, 20)]
-        for k in self.ngrams.keys():
-            for chunk in chunks:
-                if k in chunk:
-                    idf[k] += 1
-        return idf
-
-    def _cal_ngrams(self, sentences):
-        ngrams = defaultdict(int)
         for sentence in tqdm(sentences):
             part = split_sentence_to_ngram_in_part(sentence)
             for ngram in part:
                 ngrams["." + ngram[0]] += 1
                 for i in ngram:
+                    idf[i] = sum(i in c for c in chunks)
                     ngrams[i] += 1
                 ngrams[ngram[-1] + "."] += 1
-        return ngrams
+        return ngrams, idf
 
     def _filter_condprob(self, sentence_array, ngrams):
         internal_feature = defaultdict(int)
@@ -66,7 +59,7 @@ class Phraseg():
 
     def _filter_second_frequently(self, result_dict):
         words = list(result_dict.keys())
-        ngrams = self._cal_ngrams(words)
+        ngrams, idf = self._cal_ngrams_idf(words)
         for word in words:
             keep = False
             for i in spilt_sentence_to_array(word, True):
@@ -210,7 +203,6 @@ class Phraseg():
 
     def extract(self, filter=False):
         result_dict = defaultdict(int)
-        result_arr = []
         for sentence in tqdm(self.sentences):
             filter_dict = defaultdict(int)
             filter_arr = []

@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='phraseg',
-    version='1.0.10',
+    version='1.0.11',
     description='unsupervised phrase discover - 無監督新詞發現',
     long_description="Github : https://github.com/voidful/phraseg",
     url='https://github.com/voidful/phraseg',
