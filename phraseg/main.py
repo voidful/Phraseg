@@ -12,29 +12,26 @@ class Phraseg():
         else:
             content = source.splitlines()
         self.sentences = split_lines_by_punc(content)
-        self.ngrams = self._cal_ngrams(self.sentences)
+        self.ngrams, self.idf = self._cal_ngrams_idf(self.sentences)
 
-    def _chunks(self, l, n):
-        n = max(1, n)
-        return (l[i:i + n] for i in range(0, len(l), n))
-
-    def _cal_idf(self, words):
-        idf = defaultdict(int)
-        chunks = [" ".join(i) for i in self._chunks(self.sentences, 20)]
-        for i in words:
-            idf[i] = sum(i in c for c in chunks)
-        return idf
-
-    def _cal_ngrams(self, sentences):
+    def _cal_ngrams_idf(self, sentences):
         ngrams = defaultdict(int)
-        for sentence in tqdm(sentences):
+        idf = defaultdict(int)
+        _added = defaultdict(bool)
+        chunks = int(len(sentences) / 20)
+        for pos, sentence in tqdm(enumerate(sentences)):
+            if chunks != 0 and (pos + 1) % chunks == 0:
+                _added = defaultdict(bool)
             part = split_sentence_to_ngram_in_part(sentence)
             for ngram in part:
                 ngrams["." + ngram[0]] += 1
                 for i in ngram:
                     ngrams[i] += 1
+                    if not _added[i]:
+                        idf[i] += 1
+                        _added[i] = True
                 ngrams[ngram[-1] + "."] += 1
-        return ngrams
+        return ngrams, idf
 
     def _filter_condprob(self, sentence_array, ngrams):
         internal_feature = defaultdict(int)
@@ -63,7 +60,7 @@ class Phraseg():
 
     def _filter_second_frequently(self, result_dict):
         words = list(result_dict.keys())
-        ngrams = self._cal_ngrams(words)
+        ngrams, _ = self._cal_ngrams_idf(words)
         for word in words:
             keep = False
             for i in spilt_sentence_to_array(word, True):
@@ -224,15 +221,12 @@ class Phraseg():
                     filter_arr = self._remove_by_overlap(rm_sup, sentence, self.ngrams)
                     gaol = self._all_words_match_maximum_array(filter_arr)
                     for i in gaol:
-                        result_dict[i] = self.ngrams[i]
+                        result_dict[i] = self.ngrams[i] / self.idf[i]
                 else:
                     for key in filter_arr:
-                        result_dict[key] = self.ngrams[key]
+                        result_dict[key] = self.ngrams[key] / self.idf[key]
 
         result_dict = self._filter_second_frequently(result_dict)
-        idf = self._cal_idf(list(result_dict.keys()))
-        for k, v in result_dict.items():
-            result_dict[k] = v / (idf[k] + 1)
         result_dict = sorted(result_dict.items(), key=lambda kv: kv[1], reverse=True)
         return result_dict
 
@@ -248,7 +242,6 @@ class Phraseg():
                     for key, value in filter_result.items():
                         result[key] = self.ngrams[key]
                         result_arr.append(key)
-            idf = self._cal_idf(result_arr)
             if len(result) > 0:
                 if filter:
                     result_arr = self.maximum_match_same_value(result)
@@ -256,14 +249,11 @@ class Phraseg():
                     result_arr = self._remove_by_overlap(rm_sup, sentence, self.ngrams)
                     gaol = self._all_words_match_maximum_array(result_arr)
                     for i in gaol:
-                        result_dict[i] = self.ngrams[i] / (idf[i] + 1)
+                        result_dict[i] = self.ngrams[i] / self.idf[i]
                 else:
                     for key in result_arr:
-                        result_dict[key] = self.ngrams[key] / (idf[key] + 1)
+                        result_dict[key] = self.ngrams[key] / self.idf[key]
 
         result_dict = self._filter_second_frequently(result_dict)
-        idf = self._cal_idf(list(result_dict.keys()))
-        for k, v in result_dict.items():
-            result_dict[k] = v / (idf[k] + 1)
         result_dict = sorted(result_dict.items(), key=lambda kv: kv[1], reverse=True)
         return result_dict
