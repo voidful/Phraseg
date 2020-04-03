@@ -12,25 +12,29 @@ class Phraseg():
         else:
             content = source.splitlines()
         self.sentences = split_lines_by_punc(content)
-        self.ngrams, self.idf = self._cal_ngrams_idf(self.sentences)
+        self.ngrams = self._cal_ngrams(self.sentences)
 
     def _chunks(self, l, n):
         n = max(1, n)
         return (l[i:i + n] for i in range(0, len(l), n))
 
-    def _cal_ngrams_idf(self, sentences):
-        ngrams = defaultdict(int)
+    def _cal_idf(self, words):
         idf = defaultdict(int)
-        chunks = [" ".join(i) for i in self._chunks(sentences, 20)]
+        chunks = [" ".join(i) for i in self._chunks(self.sentences, 20)]
+        for i in words:
+            idf[i] = sum(i in c for c in chunks)
+        return idf
+
+    def _cal_ngrams(self, sentences):
+        ngrams = defaultdict(int)
         for sentence in tqdm(sentences):
             part = split_sentence_to_ngram_in_part(sentence)
             for ngram in part:
                 ngrams["." + ngram[0]] += 1
                 for i in ngram:
-                    idf[i] = sum(i in c for c in chunks)
                     ngrams[i] += 1
                 ngrams[ngram[-1] + "."] += 1
-        return ngrams, idf
+        return ngrams
 
     def _filter_condprob(self, sentence_array, ngrams):
         internal_feature = defaultdict(int)
@@ -59,7 +63,7 @@ class Phraseg():
 
     def _filter_second_frequently(self, result_dict):
         words = list(result_dict.keys())
-        ngrams, idf = self._cal_ngrams_idf(words)
+        ngrams = self._cal_ngrams(words)
         for word in words:
             keep = False
             for i in spilt_sentence_to_array(word, True):
@@ -213,6 +217,7 @@ class Phraseg():
                     for key, value in filter_result.items():
                         filter_dict[key] = self.ngrams[key]
                         filter_arr.append(key)
+            idf = self._cal_idf(filter_arr)
             if len(filter_dict) > 0:
                 if filter:
                     filter_arr = self.maximum_match_same_value(filter_dict)
@@ -220,10 +225,10 @@ class Phraseg():
                     filter_arr = self._remove_by_overlap(rm_sup, sentence, self.ngrams)
                     gaol = self._all_words_match_maximum_array(filter_arr)
                     for i in gaol:
-                        result_dict[i] = self.ngrams[i] / (self.idf[i] + 1)
+                        result_dict[i] = self.ngrams[i] / (idf[i] + 1)
                 else:
                     for key in filter_arr:
-                        result_dict[key] = self.ngrams[key] / (self.idf[key] + 1)
+                        result_dict[key] = self.ngrams[key] / (idf[key] + 1)
 
         result_dict = self._filter_second_frequently(result_dict)
         result_dict = sorted(result_dict.items(), key=lambda kv: kv[1], reverse=True)
@@ -241,6 +246,7 @@ class Phraseg():
                     for key, value in filter_result.items():
                         result[key] = self.ngrams[key]
                         result_arr.append(key)
+            idf = self._cal_idf(result_arr)
             if len(result) > 0:
                 if filter:
                     result_arr = self.maximum_match_same_value(result)
@@ -248,10 +254,10 @@ class Phraseg():
                     result_arr = self._remove_by_overlap(rm_sup, sentence, self.ngrams)
                     gaol = self._all_words_match_maximum_array(result_arr)
                     for i in gaol:
-                        result_dict[i] = self.ngrams[i] / (self.idf[i] + 1)
+                        result_dict[i] = self.ngrams[i] / (idf[i] + 1)
                 else:
                     for key in result_arr:
-                        result_dict[key] = self.ngrams[key] / (self.idf[key] + 1)
+                        result_dict[key] = self.ngrams[key] / (idf[key] + 1)
 
         result_dict = self._filter_second_frequently(result_dict)
         result_dict = sorted(result_dict.items(), key=lambda kv: kv[1], reverse=True)
