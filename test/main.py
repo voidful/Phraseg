@@ -18,12 +18,12 @@ class Test(unittest.TestCase):
         self.assertTrue(len(result) > 1)
 
     def testIDF(self):
-        phraseg = Phraseg("./smailltext", idf_chunk=0)
+        phraseg = Phraseg("./smailltext")
         result = phraseg.extract()
         print(result)
         self.assertTrue(len(phraseg.ngrams) > 1)
         self.assertTrue(len(result) > 1)
-        phraseg = Phraseg("./smailltext", idf_chunk=2)
+        phraseg = Phraseg("./smailltext")
         result = phraseg.extract()
         print(result)
         self.assertTrue(len(phraseg.ngrams) > 1)
