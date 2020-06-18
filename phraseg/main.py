@@ -63,7 +63,7 @@ class Phraseg():
         ngrams, _ = self._cal_ngrams_idf(words)
         for word in words:
             keep = False
-            for i in split_sentence_to_array(word, True):
+            for i in split_sentence_to_array(word):
                 if ngrams[i] < self.ngrams[word]:
                     keep = True
             if not keep:
