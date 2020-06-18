@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='phraseg',
-    version='1.1.3',
+    version='1.1.7',
     description='unsupervised phrase discover - 無監督新詞發現',
     long_description="Github : https://github.com/voidful/phraseg",
     url='https://github.com/voidful/phraseg',
@@ -19,7 +19,7 @@ setup(
         'Programming Language :: Python :: 3.6',
     ],
     install_requires=[
-          'nlp2',
+          'nlp2>=1.6.0',
       ],
     keywords='phrase nlp word segment 斷詞 分詞 新詞發現 新詞',
     packages=find_packages()

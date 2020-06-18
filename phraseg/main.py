@@ -47,12 +47,12 @@ class Phraseg():
         for i in range(1, len(sentence_array) - 1):
             p1 = ngrams[sentence_array[i]]
             p2 = ngrams[sentence_array[i + 1]]
-            p = p2 / p1
+            p = p2 / p1 if p1 is not 0 else 0
             internal_feature[sentence_array[i]] = p
 
         p1 = ngrams[last_word]
         p2 = ngrams[last_word + "."]
-        p = p2 / p1
+        p = p2 / p1 if p1 is not 0 else 0
         internal_feature[sentence_array[len(sentence_array) - 1]] = p
 
         result = {key: value for key, value in internal_feature.items() if 0 < value < 1 < len(key)}
@@ -63,7 +63,7 @@ class Phraseg():
         ngrams, _ = self._cal_ngrams_idf(words)
         for word in words:
             keep = False
-            for i in spilt_sentence_to_array(word, True):
+            for i in split_sentence_to_array(word, True):
                 if ngrams[i] < self.ngrams[word]:
                     keep = True
             if not keep:
@@ -230,7 +230,7 @@ class Phraseg():
         result_dict = sorted(result_dict.items(), key=lambda kv: kv[1], reverse=True)
         return result_dict
 
-    def extract_sent(self, sent, filter=False):
+    def extract_sent(self, sent, filter=False, idf=True):
         result_dict = defaultdict(int)
         for sentence in split_lines_by_punc([sent]):
             result = defaultdict(int)
@@ -249,10 +249,10 @@ class Phraseg():
                     result_arr = self._remove_by_overlap(rm_sup, sentence, self.ngrams)
                     gaol = self._all_words_match_maximum_array(result_arr)
                     for i in gaol:
-                        result_dict[i] = self.ngrams[i] / self.idf[i]
+                        result_dict[i] = self.ngrams[i] / self.idf[i] if idf else self.ngrams[i]
                 else:
                     for key in result_arr:
-                        result_dict[key] = self.ngrams[key] / self.idf[key]
+                        result_dict[key] = self.ngrams[key] / self.idf[key] if idf else self.ngrams[i]
 
         result_dict = self._filter_second_frequently(result_dict)
         result_dict = sorted(result_dict.items(), key=lambda kv: kv[1], reverse=True)
