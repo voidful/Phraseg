@@ -62,8 +62,10 @@ Returns
 
 
 ### Colab Demo  
-[https://colab.research.google.com/drive/1n-JVX7XPupWz3RuoOOMv-1sQAhMo3sQo](https://colab.research.google.com/drive/1n-JVX7XPupWz3RuoOOMv-1sQAhMo3sQo)
-
+Usage.    
+[https://colab.research.google.com/drive/1n-JVX7XPupWz3RuoOOMv-1sQAhMo3sQo](https://colab.research.google.com/drive/1n-JVX7XPupWz3RuoOOMv-1sQAhMo3sQo)        
+Dcard word cloud.     
+[https://colab.research.google.com/drive/113AxTGD6bTplCjvckiebQaGDEdtkbiS9](https://colab.research.google.com/drive/113AxTGD6bTplCjvckiebQaGDEdtkbiS9)         
 
 ## Example  
 ### English
