@@ -28,37 +28,26 @@ Install:
 pip install phraseg
 ```
 
-Before using :
-```
-from phraseg import *
-```
-
-
-# How to use
+# How to use    
 ```python
-phraseg = Phraseg(inputfile)
-result = phraseg.extract()
+from phraseg import *
+phraseg = Phraseg('inputfile_path')
+result = phraseg.extract() ##extract result from input text
+result = phraseg.extract(sent="INPUTSENT") ##extract result from INPUTSENT
 ```
 
 # Function
-### init(path)
-Arguments  
-- `inputfile(String)` : input file path
-
+### init(path)           
+Arguments                             
+- `inputfile(String)` : input file path                       
 
 ### extract()  
 Arguments  
-- `filter(bool)` :  filter not likely result  
-Returns  
-- `result(dict)` : result dict - oov phrase with frequency
-
-### extract_sent()   
-Arguments  
-- `sentence(String)` : get phrase from sentence  
-- `filter(bool)` : filter not likely result    
-
-Returns  
-- `result(dict)` : result dict - oov phrase with frequency
+- `merge_overlap(bool)` :  filter not likely result      
+- `sent(String)` : get phrase from sentence          
+- `result_word_minlen(int)` set return word min length              
+Returns                 
+- `result(dict)` : result dict - oov phrase with tf/idf                     
 
 
 ### Colab Demo  

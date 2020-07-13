@@ -19,7 +19,7 @@ class Phraseg():
         idf = defaultdict(int)
         _added = defaultdict(bool)
         chunks = int(len(sentences) / 20)
-        for pos, sentence in tqdm(enumerate(sentences), total=len(sentences)):
+        for pos, sentence in enumerate(sentences):
             if chunks != 0 and (pos + 1) % chunks == 0:
                 _added = defaultdict(bool)
             part = split_sentence_to_ngram_in_part(sentence)
@@ -202,9 +202,10 @@ class Phraseg():
                         list_arr.remove(word[j:i + j])
         return list_arr
 
-    def extract(self, filter=False):
+    def extract(self, sent=None, merge_overlap=True, result_word_minlen=1):
         result_dict = defaultdict(int)
-        for sentence in tqdm(self.sentences, total=len(self.sentences)):
+        sents = split_lines_by_punc([sent]) if sent is not None else self.sentences
+        for sentence in tqdm(sents, total=len(self.sentences)):
             filter_dict = defaultdict(int)
             filter_arr = []
             ngram_part = split_sentence_to_ngram_in_part(sentence)
@@ -215,7 +216,7 @@ class Phraseg():
                         filter_dict[key] = self.ngrams[key]
                         filter_arr.append(key)
             if len(filter_dict) > 0:
-                if filter:
+                if merge_overlap:
                     filter_arr = self.maximum_match_same_value(filter_dict)
                     rm_sup = self._remove_by_superlap(filter_arr, filter_dict, sentence)
                     filter_arr = self._remove_by_overlap(rm_sup, sentence, self.ngrams)
@@ -225,35 +226,6 @@ class Phraseg():
                 else:
                     for key in filter_arr:
                         result_dict[key] = self.ngrams[key] / self.idf[key]
-
         result_dict = self._filter_second_frequently(result_dict)
-        result_dict = sorted(result_dict.items(), key=lambda kv: kv[1], reverse=True)
-        return result_dict
-
-    def extract_sent(self, sent, filter=False, idf=True):
-        result_dict = defaultdict(int)
-        for sentence in split_lines_by_punc([sent]):
-            result = defaultdict(int)
-            result_arr = []
-            ngram_part = split_sentence_to_ngram_in_part(sentence)
-            if len(ngram_part) > 0:
-                for part in ngram_part:
-                    filter_result = self._filter_condprob(part, self.ngrams)
-                    for key, value in filter_result.items():
-                        result[key] = self.ngrams[key]
-                        result_arr.append(key)
-            if len(result) > 0:
-                if filter:
-                    result_arr = self.maximum_match_same_value(result)
-                    rm_sup = self._remove_by_superlap(result_arr, result, sentence)
-                    result_arr = self._remove_by_overlap(rm_sup, sentence, self.ngrams)
-                    gaol = self._all_words_match_maximum_array(result_arr)
-                    for i in gaol:
-                        result_dict[i] = self.ngrams[i] / self.idf[i] if idf else self.ngrams[i]
-                else:
-                    for key in result_arr:
-                        result_dict[key] = self.ngrams[key] / self.idf[key] if idf else self.ngrams[i]
-
-        result_dict = self._filter_second_frequently(result_dict)
-        result_dict = sorted(result_dict.items(), key=lambda kv: kv[1], reverse=True)
+        result_dict = {k: v for k, v in result_dict.items() if len(split_sentence_to_array(k)) > result_word_minlen}
         return result_dict
