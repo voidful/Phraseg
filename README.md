@@ -2,6 +2,8 @@
 Tools for out of vocabulary(oov) word extraction and extracting new phrases without supervision         
 通過統計的方式實現無監督新詞發現    
 
+![PyPI - Downloads](https://img.shields.io/pypi/dm/phraseg)
+
 ### Feature
 - 能從極少的語料中抽取新詞
 - 召回率更好
