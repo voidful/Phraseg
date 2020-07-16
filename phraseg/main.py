@@ -19,7 +19,7 @@ class Phraseg():
         idf = defaultdict(int)
         _added = defaultdict(bool)
         chunks = int(len(sentences) / 20)
-        for pos, sentence in enumerate(sentences):
+        for pos, sentence in tqdm(enumerate(sentences), total=len(self.sentences)):
             if chunks != 0 and (pos + 1) % chunks == 0:
                 _added = defaultdict(bool)
             part = split_sentence_to_ngram_in_part(sentence)
@@ -205,7 +205,8 @@ class Phraseg():
     def extract(self, sent=None, merge_overlap=True, result_word_minlen=1):
         result_dict = defaultdict(int)
         sents = split_lines_by_punc([sent]) if sent is not None else self.sentences
-        for sentence in tqdm(sents, total=len(self.sentences)):
+        iter = sents if sent is not None else tqdm(sents, total=len(self.sentences))
+        for sentence in iter:
             filter_dict = defaultdict(int)
             filter_arr = []
             ngram_part = split_sentence_to_ngram_in_part(sentence)
