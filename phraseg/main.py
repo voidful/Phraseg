@@ -18,7 +18,7 @@ class Phraseg():
         ngrams = defaultdict(int)
         idf = defaultdict(int)
         _added = defaultdict(bool)
-        chunks = int(len(sentences) / 20)
+        chunks = 500
         for pos, sentence in tqdm(enumerate(sentences), total=len(self.sentences)):
             if chunks != 0 and (pos + 1) % chunks == 0:
                 _added = defaultdict(bool)
@@ -227,6 +227,7 @@ class Phraseg():
                 else:
                     for key in filter_arr:
                         result_dict[key] = self.ngrams[key] / self.idf[key]
-        result_dict = self._filter_second_frequently(result_dict)
+        if merge_overlap:
+            result_dict = self._filter_second_frequently(result_dict)
         result_dict = {k: v for k, v in result_dict.items() if len(split_sentence_to_array(k)) > result_word_minlen}
         return result_dict
