@@ -6,11 +6,12 @@ from tqdm import tqdm
 
 class Phraseg():
 
-    def __init__(self, source):
+    def __init__(self, source, idf_chunk=500):
         if is_file_exist(source):
             content = read_files_into_lines(source)
         else:
             content = source.splitlines()
+        self.idf_chunk = idf_chunk
         self.sentences = split_lines_by_punc(content)
         self.ngrams, self.idf = self._cal_ngrams_idf(self.sentences)
 
@@ -18,7 +19,7 @@ class Phraseg():
         ngrams = defaultdict(int)
         idf = defaultdict(int)
         _added = defaultdict(bool)
-        chunks = 500
+        chunks = self.idf_chunk
         for pos, sentence in tqdm(enumerate(sentences), total=len(self.sentences)):
             if chunks != 0 and (pos + 1) % chunks == 0:
                 _added = defaultdict(bool)
