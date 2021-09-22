@@ -1,7 +1,7 @@
 # Phraseg - 一言：新詞發現工具包
 
 Tools for out of vocabulary(oov) word extraction and extracting new phrases
-without supervision  
+without supervision
 通過統計的方式實現無監督新詞發現
 
 ![PyPI - Downloads](https://img.shields.io/pypi/dm/phraseg)
@@ -57,15 +57,15 @@ Arguments
 
 - `merge_overlap(bool)` : filter not likely result
 - `sent(String)` : get phrase from sentence
-- `result_word_minlen(int)` set return word min length  
+- `result_word_minlen(int)` set return word min length
   Returns
 - `result(dict)` : result dict - oov phrase with tf/idf
 
 ### Colab Demo
 
-Usage.  
-[https://colab.research.google.com/drive/1n-JVX7XPupWz3RuoOOMv-1sQAhMo3sQo](https://colab.research.google.com/drive/1n-JVX7XPupWz3RuoOOMv-1sQAhMo3sQo)  
-Dcard word cloud.  
+Usage.
+[https://colab.research.google.com/drive/1n-JVX7XPupWz3RuoOOMv-1sQAhMo3sQo](https://colab.research.google.com/drive/1n-JVX7XPupWz3RuoOOMv-1sQAhMo3sQo)
+Dcard word cloud.
 [https://colab.research.google.com/drive/113AxTGD6bTplCjvckiebQaGDEdtkbiS9](https://colab.research.google.com/drive/113AxTGD6bTplCjvckiebQaGDEdtkbiS9)
 
 ## Example
