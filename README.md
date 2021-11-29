@@ -32,7 +32,7 @@ pip install phraseg
 
 # How to use    
 ```python
-from phraseg import *
+from phraseg import Phraseg
 phraseg = Phraseg('inputfile_path')
 result = phraseg.extract() ##extract result from input text
 result = phraseg.extract(sent="INPUTSENT") ##extract result from INPUTSENT

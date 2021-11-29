@@ -1,18 +1,19 @@
 from collections import defaultdict
 
-from nlp2 import *
+from nlp2 import is_file_exist, read_files_into_lines, split_lines_by_punc, split_sentence_to_ngram_in_part, \
+    split_sentence_to_array
 from tqdm import tqdm
 
 
-class Phraseg():
+class Phraseg:
 
-    def __init__(self, source, idf_chunk=500):
+    def __init__(self, source, line_max_length=100, idf_chunk=500):
         if is_file_exist(source):
             content = read_files_into_lines(source)
         else:
             content = source.splitlines()
         self.idf_chunk = idf_chunk
-        self.sentences = split_lines_by_punc(content)
+        self.sentences = split_lines_by_punc(content, max_len=line_max_length)
         self.ngrams, self.idf = self._cal_ngrams_idf(self.sentences)
 
     def _cal_ngrams_idf(self, sentences):
