@@ -7,7 +7,7 @@ from tqdm import tqdm
 
 class Phraseg:
 
-    def __init__(self, source, line_max_length=100, idf_chunk=500):
+    def __init__(self, source, line_max_length=50, idf_chunk=500):
         if is_file_exist(source):
             content = read_files_into_lines(source)
         else:
@@ -204,9 +204,9 @@ class Phraseg:
                         list_arr.remove(word[j:i + j])
         return list_arr
 
-    def extract(self, sent=None, merge_overlap=True, result_word_minlen=1):
+    def extract(self, sent=None, merge_overlap=True, result_word_minlen=1, line_max_length=50):
         result_dict = defaultdict(int)
-        sents = split_lines_by_punc([sent]) if sent is not None else self.sentences
+        sents = split_lines_by_punc([sent], max_len=line_max_length) if sent is not None else self.sentences
         iter = sents if sent is not None else tqdm(sents, total=len(self.sentences))
         for sentence in iter:
             filter_dict = defaultdict(int)
