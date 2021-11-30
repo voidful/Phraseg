@@ -2,7 +2,8 @@
 Tools for out of vocabulary(oov) word extraction and extracting new phrases without supervision         
 通過統計的方式實現無監督新詞發現    
 
-![PyPI - Downloads](https://img.shields.io/pypi/dm/phraseg)
+![PyPI - Downloads](https://img.shields.io/pypi/dm/phraseg)[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fvoidful%2FPhraseg.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fvoidful%2FPhraseg?ref=badge_shield)
+
 
 ### Feature
 - 能從極少的語料中抽取新詞
@@ -150,3 +151,7 @@ Result
 ```text
 [('ปร', 4), ('และ', 4), ('ละ', 4), ('กไ', 3), ('จด', 3), ('ขอ', 3), ('ทาง', 2), ('โดย', 2), ('ถง', 2)]
 ```
+
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fvoidful%2FPhraseg.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fvoidful%2FPhraseg?ref=badge_large)
